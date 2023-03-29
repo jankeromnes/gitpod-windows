@@ -1,2 +1,9 @@
 image:
   file: .gitpod.Dockerfile
+
+tasks:
+  - name: RDP
+    command: echo todo # ./ngrok tcp --region $CRP 3388 &>/dev/null & echo RDP Address: && curl --silent --show-error http://127.0.0.1:4040/api/tunnels | sed -nE 's/.*public_url":"tcp:..([^"]*).*/\1/p'
+  - name: Windows VM
+    init: curl -o /tmp/vm.zip -L https://aka.ms/windev_VM_virtualbox && unzip /tmp/vm.zip -d . && rm -f /tmp/vm.zip
+    command: qemu-system-x86_64 -hda ./WinDev2303Eval-disk1.vmdk -m 4G -smp cores=4 -net user,hostfwd=tcp::3388-:3389 -net nic -object rng-random,id=rng0,filename=/dev/urandom -device virtio-rng-pci,rng=rng0 -vga vmware -nographic
